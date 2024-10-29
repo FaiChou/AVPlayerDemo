@@ -48,6 +48,13 @@ struct ContentView: View {
             .navigationDestination(for: URL.self) { url in
                 Player(url: url)
             }
+            .onOpenURL(perform: { url in
+                print(url)
+                if let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true),
+                    let params = components.queryItems, let urlString = params.first(where: { $0.name == "url" })?.value {
+                    urls = [URL(string: urlString)!]
+                }
+            })
         }
     }
 }

@@ -17,7 +17,8 @@ struct Player: View {
         VideoPlayer(player: player)
             .onAppear {
                 player = AVPlayer(url: url)
-                
+
+                // 不设置这个的话，如果在静音模式，视频没有声音
                 let audioSession = AVAudioSession.sharedInstance()
                 do {
                     try audioSession.setCategory(.playback, mode: .default)
@@ -37,5 +38,6 @@ struct Player: View {
             .onDisappear {
                 url.stopAccessingSecurityScopedResource()
             }
+            .navigationBarTitle("")
     }
 }
