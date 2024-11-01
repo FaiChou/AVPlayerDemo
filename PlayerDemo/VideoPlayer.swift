@@ -12,12 +12,10 @@ struct Player: View {
     let url: URL
     @State var isPlaying: Bool = false
     @State var player: AVPlayer? = nil
-    
     var body: some View {
         VideoPlayer(player: player)
             .onAppear {
                 player = AVPlayer(url: url)
-
                 // 不设置这个的话，如果在静音模式，视频没有声音
                 let audioSession = AVAudioSession.sharedInstance()
                 do {
@@ -35,6 +33,13 @@ struct Player: View {
                 
                 player?.play()
             }
+            .onLongPressGesture(minimumDuration: 1, perform: {
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.impactOccurred()
+                player?.rate = 2.0
+            }, onPressingChanged: { _ in
+                player?.rate = 1.0
+            })
             .onDisappear {
                 url.stopAccessingSecurityScopedResource()
             }
